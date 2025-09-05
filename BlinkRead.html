@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlinkRead - Professional Speed Reading Technology</title>
+    <meta name="description" content="Advanced RSVP speed reading technology for professionals. Improve reading efficiency and comprehension with scientifically-proven methods.">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fafafa;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #dc2626;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            margin: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 600;
+            transition: color 0.2s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #dc2626;
+        }
+
+        main {
+            min-height: calc(100vh - 140px);
+            padding: 0;
+        }
+
+        .homepage-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            align-items: start;
+        }
+
+        .left-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .main-reader {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+            border: 2px solid #dc2626;
+        }
+
+        .right-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .sidebar h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sidebar-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-item h4 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .sidebar-item p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .sidebar-link {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar-link:hover {
+            opacity: 0.8;
+        }
+
+        .reading-display {
+            background: #1a1a1a;
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #dc2626;
+        }
+
+        .reading-text {
+            font-family: 'Georgia', serif;
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        .orp {
+            color: #dc2626;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 1rem 0;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #dc2626;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+        }
+
+        .slider-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #dc2626;
+            height: 100%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: #fef2f2;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h2 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .benefit {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .benefit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .benefit h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .benefit p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .speed-ranges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .speed-range {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .speed-range:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .speed-range h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .speed-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .speed-range p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: #e2e8f0;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+            border-top: 3px solid #dc2626;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .footer-section a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: #dc2626;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #94a3b8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f1f5f9;
+        }
+
+        .legal-page h2 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .legal-page h3 {
+            margin: 2rem 0 1rem;
+            color: #2d3748;
+        }
+
+        .legal-page p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #fecaca;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #dc2626;
+        }
+
+        @media (max-width: 1200px) {
+            .homepage-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .left-sidebar,
+            .right-sidebar {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .homepage-layout {
+                padding: 1rem 0;
+            }
+
+            .main-reader,
+            .left-sidebar,
+            .right-sidebar {
+                padding: 1.5rem;
+            }
+
+            .reading-text {
+                font-size: 2rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-wrap: wrap;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                border-top: 1px solid #e2e8f0;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .left-sidebar,
+            .right-sidebar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const SpeedReadApp = () => {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [modalOpen, setModalOpen] = useState(false);
+            const [modalContent, setModalContent] = useState('');
+
+            const openModal = (content) => {
+                setModalContent(content);
+                setModalOpen(true);
+            };
+
+            const closeModal = () => {
+                setModalOpen(false);
+                setModalContent('');
+            };
+
+            const SpeedReader = () => {
+                const [text, setText] = useState("Welcome to BlinkRead Professional. This advanced RSVP technology enhances reading efficiency through scientifically-proven methods. The highlighted letter represents the Optimal Recognition Point for maximum cognitive processing speed. Configure your training parameters below and begin developing enhanced reading capabilities immediately.");
+                const [currentWordIndex, setCurrentWordIndex] = useState(0);
+                const [isPlaying, setIsPlaying] = useState(false);
+                const [speed, setSpeed] = useState(350);
+                const [chunkSize, setChunkSize] = useState(1);
+                const [fontSize, setFontSize] = useState(40);
+
+                const intervalRef = useRef(null);
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+
+                const getORPHighlight = (word) => {
+                    if (!word) return { before: '', orp: '', after: '' };
+                    
+                    const cleanWord = word.replace(/[^\w]/g, '');
+                    const wordLength = cleanWord.length;
+                    let orpIndex = 0;
+                    
+                    if (wordLength <= 1) orpIndex = 0;
+                    else if (wordLength <= 5) orpIndex = 1;
+                    else if (wordLength <= 9) orpIndex = 2;
+                    else orpIndex = 3;
+                    
+                    let actualIndex = 0;
+                    let cleanCount = 0;
+                    
+                    for (let i = 0; i < word.length; i++) {
+                        if (/\w/.test(word[i])) {
+                            if (cleanCount === orpIndex) {
+                                actualIndex = i;
+                                break;
+                            }
+                            cleanCount++;
+                        }
+                    }
+                    
+                    return {
+                        before: word.substring(0, actualIndex),
+                        orp: word[actualIndex] || '',
+                        after: word.substring(actualIndex + 1)
+                    };
+                };
+
+                const getCurrentChunk = () => {
+                    const chunk = [];
+                    for (let i = 0; i < chunkSize; i++) {
+                        if (currentWordIndex + i < words.length) {
+                            chunk.push(words[currentWordIndex + i]);
+                        }
+                    }
+                    return chunk;
+                };
+
+                useEffect(() => {
+                    if (intervalRef.current) {
+                        clearInterval(intervalRef.current);
+                    }
+
+                    if (isPlaying && currentWordIndex < words.length) {
+                        const delay = (60000 / speed) * chunkSize;
+                        intervalRef.current = setTimeout(() => {
+                            setCurrentWordIndex(prev => {
+                                const next = prev + chunkSize;
+                                if (next >= words.length) {
+                                    setIsPlaying(false);
+                                    return prev;
+                                }
+                                return next;
+                            });
+                        }, delay);
+                    }
+
+                    return () => {
+                        if (intervalRef.current) {
+                            clearInterval(intervalRef.current);
+                        }
+                    };
+                }, [isPlaying, currentWordIndex, speed, chunkSize, words.length]);
+
+                useEffect(() => {
+                    const handleKeyPress = (e) => {
+                        if (e.code === 'Space') {
+                            e.preventDefault();
+                            setIsPlaying(prev => !prev);
+                        }
+                        if (e.key === 'r' || e.key === 'R') {
+                            e.preventDefault();
+                            setIsPlaying(false);
+                            setCurrentWordIndex(0);
+                        }
+                    };
+
+                    window.addEventListener('keydown', handleKeyPress);
+                    return () => window.removeEventListener('keydown', handleKeyPress);
+                }, []);
+
+                const currentChunk = getCurrentChunk();
+                const progress = words.length > 0 ? (currentWordIndex / words.length) * 100 : 0;
+                const wordsRemaining = words.length - currentWordIndex;
+                const timeRemaining = Math.ceil(wordsRemaining / speed);
+
+                return React.createElement('div', null,
+                    React.createElement('h2', { style: { marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem' } }, 'Professional Speed Reading Interface'),
+                    React.createElement('textarea', {
+                        value: text,
+                        onChange: (e) => {
+                            setText(e.target.value);
+                            setCurrentWordIndex(0);
+                            setIsPlaying(false);
+                        },
+                        placeholder: "Enter your content here to begin professional speed reading training..."
+                    }),
+
+                    React.createElement('div', { className: 'reading-display' },
+                        React.createElement('div', {
+                            className: 'reading-text',
+                            style: { fontSize: `${fontSize}px` }
+                        },
+                            currentChunk.length > 0 ? (
+                                chunkSize === 1 ? 
+                                React.createElement('span', null,
+                                    React.createElement('span', null, getORPHighlight(currentChunk[0]).before),
+                                    React.createElement('span', { className: 'orp' }, getORPHighlight(currentChunk[0]).orp),
+                                    React.createElement('span', null, getORPHighlight(currentChunk[0]).after)
+                                ) :
+                                React.createElement('span', null, currentChunk.join(' '))
+                            ) : (
+                                React.createElement('span', { style: { opacity: 0.6 } }, 
+                                    words.length === 0 ? 'Enter content above to begin' : 'Ready to start training'
+                                )
+                            )
+                        )
+                    ),
+
+                    React.createElement('div', { className: 'progress-bar' },
+                        React.createElement('div', {
+                            className: 'progress-fill',
+                            style: { width: `${progress}%` }
+                        })
+                    ),
+
+                    React.createElement('div', { className: 'button-group' },
+                        React.createElement('button', {
+                            className: 'btn',
+                            onClick: () => setIsPlaying(!isPlaying),
+                            disabled: words.length === 0
+                        }, isPlaying ? 'Pause Training' : (currentWordIndex >= words.length - 1 ? 'Restart' : 'Begin Training')),
+                        React.createElement('button', {
+                            className: 'btn',
+                            onClick: () => {
+                                setIsPlaying(false);
+                                setCurrentWordIndex(0);
+                            },
+                            disabled: words.length === 0,
+                            style: { background: '#4a5568' }
+                        }, 'Reset')
+                    ),
+
+                    React.createElement('div', { className: 'controls' },
+                        React.createElement('div', { className: 'control-group' },
+                            React.createElement('label', null, `Reading Speed: ${speed} WPM`),
+                            React.createElement('input', {
+                                type: 'range',
+                                min: 100,
+                                max: 1000,
+                                step: 25,
+                                value: speed,
+                                onChange: (e) => setSpeed(parseInt(e.target.value)),
+                                className: 'slider-input'
+                            }),
+                            React.createElement('div', { className: 'slider-values' },
+                                React.createElement('span', null, '100 WPM'),
+                                React.createElement('span', null, '1000 WPM')
+                            )
+                        ),
+                        React.createElement('div', { className: 'control-group' },
+                            React.createElement('label', null, `Word Grouping: ${chunkSize} word${chunkSize > 1 ? 's' : ''}`),
+                            React.createElement('input', {
+                                type: 'range',
+                                min: 1,
+                                max: 5,
+                                step: 1,
+                                value: chunkSize,
+                                onChange: (e) => setChunkSize(parseInt(e.target.value)),
+                                className: 'slider-input'
+                            }),
+                            React.createElement('div', { className: 'slider-values' },
+                                React.createElement('span', null, '1 word'),
+                                React.createElement('span', null, '5 words')
+                            )
+                        )
+                    ),
+
+                    React.createElement('div', { className: 'stats' },
+                        React.createElement('div', { className: 'stat' },
+                            React.createElement('div', { className: 'stat-value' }, `${Math.floor(currentWordIndex / chunkSize) + 1}`),
+                            React.createElement('div', { className: 'stat-label' }, `of ${Math.ceil(words.length / chunkSize)} segments`)
+                        ),
+                        React.createElement('div', { className: 'stat' },
+                            React.createElement('div', { className: 'stat-value' }, `${timeRemaining}m`),
+                            React.createElement('div', { className: 'stat-label' }, 'time remaining')
+                        ),
+                        React.createElement('div', { className: 'stat' },
+                            React.createElement('div', { className: 'stat-value' }, `${words.length}`),
+                            React.createElement('div', { className: 'stat-label' }, 'total words')
+                        )
+                    ),
+
+                    chunkSize === 1 && React.createElement('div', {
+                        className: 'feature-highlight'
+                    },
+                        React.createElement('h3', { style: { color: '#dc2626', marginBottom: '1rem', fontSize: '1.1rem' } }, 'Optimal Recognition Point Technology'),
+                        React.createElement('p', { style: { color: '#4a5568', margin: 0 } }, 'The highlighted red letter represents the scientifically-determined Optimal Recognition Point (ORP). This advanced focal technique minimizes eye movement and maximizes neural processing efficiency for enhanced reading performance.')
+                    )
+                );
+            };
+
+            const HomePage = () => {
+                return React.createElement('div', { className: 'homepage-layout container' },
+                    React.createElement('div', { className: 'left-sidebar sidebar' },
+                        React.createElement('h3', null, 'Training Benefits'),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'Enhanced Productivity'),
+                            React.createElement('p', null, 'Process 30-60 additional minutes of content daily, translating to 200+ hours annually.'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('benefits');
+                                }
+                            }, 'Explore Benefits →')
+                        ),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'Cognitive Enhancement'),
+                            React.createElement('p', null, 'Strengthen neural pathways and improve information processing capabilities.'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('benefits');
+                                }
+                            }, 'Learn More →')
+                        ),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'Performance Metrics'),
+                            React.createElement('p', null, 'Track your reading velocity improvements and comprehension rates.'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('speed-info');
+                                }
+                            }, 'View Benchmarks →')
+                        )
+                    ),
+                    React.createElement('div', { className: 'main-reader' },
+                        React.createElement(SpeedReader)
+                    ),
+                    React.createElement('div', { className: 'right-sidebar sidebar' },
+                        React.createElement('h3', null, 'Speed Reading Science'),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'RSVP Technology'),
+                            React.createElement('p', null, 'Rapid Serial Visual Presentation eliminates eye movement and enhances focus.'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('speed-info');
+                                }
+                            }, 'Learn Technology →')
+                        ),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'Performance Ranges'),
+                            React.createElement('p', null, 'Baseline: 200-300 WPM • Advanced: 700-1000+ WPM'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('speed-info');
+                                }
+                            }, 'View Ranges →')
+                        ),
+                        React.createElement('div', { className: 'sidebar-item' },
+                            React.createElement('h4', null, 'Professional Applications'),
+                            React.createElement('p', null, 'Ideal for executives, researchers, students, and knowledge professionals.'),
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'sidebar-link',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('benefits');
+                                }
+                            }, 'See Applications →')
+                        )
+                    )
+                );
+            };
+
+            const BenefitsPage = () => {
+                const benefits = [
+                    {
+                        title: 'Enhanced Professional Productivity',
+                        description: 'Accelerated reading capabilities enable professionals to process 30-60 additional minutes of content daily, translating to over 200 hours of increased productivity annually. This efficiency gain provides substantial competitive advantages in knowledge-intensive environments.'
+                    },
+                    {
+                        title: 'Improved Cognitive Focus', 
+                        description: 'RSVP technology eliminates reading distractions and regression habits, enhancing sustained attention and concentration. Users develop stronger mental discipline and reduced cognitive fatigue during extended reading sessions.'
+                    },
+                    {
+                        title: 'Superior Information Retention',
+                        description: 'Advanced reading techniques promote enhanced neural pathway development, leading to improved long-term memory consolidation and information recall. Users demonstrate measurably better comprehension of complex materials.'
+                    },
+                    {
+                        title: 'Elimination of Subvocalization',
+                        description: 'Progressive training reduces internal vocalization patterns that limit reading speed, enabling direct visual-to-cognitive processing pathways that can increase reading rates by 200-400%.'
+                    },
+                    {
+                        title: 'Enhanced Pattern Recognition',
+                        description: 'Systematic exposure to grouped text elements strengthens the brain\'s ability to recognize word patterns, grammatical structures, and contextual relationships for more efficient information processing.'
+                    },
+                    {
+                        title: 'Executive Performance Enhancement',
+                        description: 'Regular speed reading training exercises neural plasticity and information processing speed, creating measurable improvements in overall cognitive performance and decision-making capabilities.'
+                    }
+                ];
+
+                return React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h1', null, 'Professional Development Benefits'),
+                        React.createElement('p', null, 'Speed reading technology offers measurable advantages for professional development and cognitive enhancement. The following benefits represent evidence-based outcomes observed in users who engage with systematic speed reading training programs.')
+                    ),
+                    React.createElement('div', { className: 'benefits-grid' },
+                        benefits.map((benefit, index) =>
+                            React.createElement('div', { key: index, className: 'benefit' },
+                                React.createElement('h3', null, benefit.title),
+                                React.createElement('p', null, benefit.description)
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h2', null, 'Implementation Methodology'),
+                        React.createElement('p', null, 'BlinkRead employs scientifically-validated Rapid Serial Visual Presentation (RSVP) methodology to enhance reading performance. This approach presents text sequentially at optimal intervals, reducing eye movement and enabling concentrated focus on word recognition and comprehension processes.'),
+                        React.createElement('p', null, 'Professional users consistently report significant improvements in information processing speed, document review efficiency, and overall cognitive performance within 2-4 weeks of regular training implementation.')
+                    )
+                );
+            };
+
+            const SpeedInfoPage = () => {
+                const speedRanges = [
+                    {
+                        title: 'Baseline Performance',
+                        speed: '200-300 WPM',
+                        description: 'Standard reading velocity for most adults, incorporating natural subvocalization patterns and periodic regression. Represents untrained reading performance with conventional eye movement patterns.'
+                    },
+                    {
+                        title: 'Intermediate Proficiency',
+                        speed: '400-600 WPM', 
+                        description: 'Achievable performance level through systematic training and technique refinement. Demonstrates reduced subvocalization and improved visual processing efficiency while maintaining strong comprehension rates.'
+                    },
+                    {
+                        title: 'Advanced Expertise',
+                        speed: '700-1000+ WPM',
+                        description: 'Expert-level performance achieved through extensive training and cognitive conditioning. Optimal for straightforward content; complex technical materials may require adjusted speeds to maintain comprehension quality.'
+                    }
+                ];
+
+                return React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h1', null, 'Reading Performance Benchmarks'),
+                        React.createElement('p', null, 'Understanding reading speed benchmarks enables users to establish realistic training objectives and monitor professional development progress. Performance levels vary based on individual aptitude, training consistency, and content complexity.')
+                    ),
+                    React.createElement('div', { className: 'speed-ranges' },
+                        speedRanges.map((range, index) =>
+                            React.createElement('div', { key: index, className: 'speed-range' },
+                                React.createElement('h3', null, range.title),
+                                React.createElement('div', { className: 'speed-value' }, range.speed),
+                                React.createElement('p', null, range.description)
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h2', null, 'Professional Training Methodology'),
+                        React.createElement('p', null, 'Optimal results require consistent practice and progressive difficulty advancement. Begin with comfortable velocity settings and implement gradual increases over time. Focus on eliminating subvocalization patterns to unlock advanced reading speeds while maintaining comprehension quality.'),
+                        React.createElement('p', null, 'Professional users should maintain daily practice sessions of 15-20 minutes, prioritizing technique refinement over raw speed development during initial training phases.')
+                    ),
+                    React.createElement('div', { className: 'card' },
+                        React.createElement('h2', null, 'RSVP Technology Framework'),
+                        React.createElement('p', null, 'Rapid Serial Visual Presentation technology eliminates traditional reading limitations by presenting text at a fixed focal point. This methodology reduces saccadic eye movements, minimizes regression patterns, and enables sustained concentration on word recognition processes.'),
+                        React.createElement('p', null, 'The Optimal Recognition Point (ORP) highlighting system identifies the most efficient focal position within each word, maximizing neural processing efficiency and reading velocity while preserving comprehension accuracy.')
+                    )
+                );
+            };
+
+            const ReaderPage = () => {
+                return React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'card' },
+                        React.createElement(SpeedReader)
+                    )
+                );
+            };
+
+            const getPageContent = () => {
+                switch(currentPage) {
+                    case 'home': return React.createElement(HomePage);
+                    case 'reader': return React.createElement(ReaderPage);
+                    case 'benefits': return React.createElement(BenefitsPage);
+                    case 'speed-info': return React.createElement(SpeedInfoPage);
+                    default: return React.createElement(HomePage);
+                }
+            };
+
+            const getLegalContent = () => {
+                switch(modalContent) {
+                    case 'privacy':
+                        return {
+                            title: 'Privacy Policy',
+                            content: React.createElement('div', { className: 'legal-page' },
+                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
+                                React.createElement('h3', null, '1. Data Collection and Storage'),
+                                React.createElement('p', null, 'BlinkRead operates as a client-side application with no user account requirements or server-side data storage. We do not collect, store, transmit, or track any personal information, reading content, or usage patterns. All user interactions remain entirely within your local device environment.'),
+                                React.createElement('h3', null, '2. Local Browser Storage'),
+                                React.createElement('p', null, 'Any preference settings or configurations you adjust are stored exclusively in your browser\'s local storage and are never transmitted to external servers. Users may clear this data at any time through standard browser settings management.'),
+                                React.createElement('h3', null, '3. Analytics and Tracking'),
+                                React.createElement('p', null, 'BlinkRead does not implement cookies, analytics tracking, user behavior monitoring, or any third-party tracking technologies. Your usage of this platform is completely private and anonymous.'),
+                                React.createElement('h3', null, '4. Content Processing'),
+                                React.createElement('p', null, 'All text content input into the speed reading interface is processed locally within your browser environment and is never transmitted to external servers, stored remotely, or accessed by third parties.'),
+                                React.createElement('h3', null, '5. Contact Information'),
+                                React.createElement('p', null, 'For inquiries regarding this privacy policy or platform functionality, please contact: mohitreal.nz@gmail.com')
+                            )
+                        };
+                    case 'terms':
+                        return {
+                            title: 'Terms of Service',
+                            content: React.createElement('div', { className: 'legal-page' },
+                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
+                                React.createElement('h3', null, '1. Service Provision'),
+                                React.createElement('p', null, 'BlinkRead provides professional speed reading training tools and educational resources without charge. Users may access this service for personal development, educational advancement, or professional enhancement purposes without registration requirements.'),
+                                React.createElement('h3', null, '2. Service Availability and Reliability'),
+                                React.createElement('p', null, 'While we endeavor to maintain consistent service availability, BlinkRead is provided on an "as-is" basis without warranties regarding uptime, functionality, or performance. We assume no liability for service interruptions or technical difficulties.'),
+                                React.createElement('h3', null, '3. Intellectual Property Rights'),
+                                React.createElement('p', null, 'Users retain complete ownership and control over any content they input into the platform. BlinkRead claims no rights to user-generated content and does not store, access, or utilize such materials in any manner.'),
+                                React.createElement('h3', null, '4. Acceptable Use Guidelines'),
+                                React.createElement('p', null, 'Users agree to utilize this service exclusively for lawful purposes and in ways that do not compromise platform integrity or negatively impact other users. Attempts to reverse engineer, exploit, or damage the service are prohibited.'),
+                                React.createElement('h3', null, '5. Service Modifications'),
+                                React.createElement('p', null, 'BlinkRead reserves the right to modify, update, or discontinue service features without advance notice. Users acknowledge that continued access depends on our discretion and available resources.')
+                            )
+                        };
+                    case 'disclaimer':
+                        return {
+                            title: 'Professional Disclaimer',
+                            content: React.createElement('div', { className: 'legal-page' },
+                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
+                                React.createElement('h3', null, '1. Performance Expectations'),
+                                React.createElement('p', null, 'BlinkRead provides educational tools designed to support reading speed development. We make no guarantees regarding specific performance improvements, achievement timelines, or individual results, as outcomes vary significantly based on user dedication, aptitude, and practice consistency.'),
+                                React.createElement('h3', null, '2. Individual Variation in Results'),
+                                React.createElement('p', null, 'Reading speed enhancement depends on numerous factors including baseline abilities, training frequency, content complexity, and individual cognitive characteristics. Performance improvements referenced represent typical outcomes but are not guaranteed for all users.'),
+                                React.createElement('h3', null, '3. Educational Purpose Limitation'),
+                                React.createElement('p', null, 'This platform serves educational and productivity enhancement purposes exclusively. BlinkRead is not intended to diagnose, treat, or address reading disabilities, learning disorders, or cognitive impairments. Users with such concerns should consult qualified educational or medical professionals.'),
+                                React.createElement('h3', null, '4. Liability Limitations'),
+                                React.createElement('p', null, 'BlinkRead assumes no responsibility for direct, indirect, incidental, or consequential outcomes arising from platform usage. Users engage with this service at their own discretion and assume full responsibility for their training decisions.'),
+                                React.createElement('h3', null, '5. Professional Development Context'),
+                                React.createElement('p', null, 'This tool is designed to complement, not replace, formal educational instruction or professional development programs. Users should integrate speed reading techniques within appropriate learning contexts for optimal results.')
+                            )
+                        };
+                    default:
+                        return { title: '', content: '' };
+                }
+            };
+
+            const legal = getLegalContent();
+
+            return React.createElement('div', null,
+                React.createElement('header', null,
+                    React.createElement('div', { className: 'container' },
+                        React.createElement('div', { className: 'header-content' },
+                            React.createElement('a', {
+                                href: '#',
+                                className: 'logo',
+                                onClick: (e) => {
+                                    e.preventDefault();
+                                    setCurrentPage('home');
+                                    setMobileMenuOpen(false);
+                                }
+                            }, 'BlinkRead'),
+                            React.createElement('button', {
+                                className: 'mobile-menu-toggle',
+                                onClick: () => setMobileMenuOpen(!mobileMenuOpen)
+                            }, '☰'),
+                            React.createElement('nav', null,
+                                React.createElement('ul', {
+                                    className: mobileMenuOpen ? 'active' : ''
+                                },
+                                    React.createElement('li', null,
+                                        React.createElement('a', {
+                                            href: '#',
+                                            className: currentPage === 'home' ? 'active' : '',
+                                            onClick: (e) => {
+                                                e.preventDefault();
+                                                setCurrentPage('home');
+                                                setMobileMenuOpen(false);
+                                            }
+                                        }, 'Home')
+                                    ),
+                                    React.createElement('li', null,
+                                        React.createElement('a', {
+                                            href: '#',
+                                            className: currentPage === 'reader' ? 'active' : '',
+                                            onClick: (e) => {
+                                                e.preventDefault();
+                                                setCurrentPage('reader');
+                                                setMobileMenuOpen(false);
+                                            }
+                                        }, 'Training Platform')
+                                    ),
+                                    React.createElement('li', null,
+                                        React.createElement('a', {
+                                            href: '#',
+                                            className: currentPage === 'benefits' ? 'active' : '',
+                                            onClick: (e) => {
+                                                e.preventDefault();
+                                                setCurrentPage('benefits');
+                                                setMobileMenuOpen(false);
+                                            }
+                                        }, 'Benefits')
+                                    ),
+                                    React.createElement('li', null,
+                                        React.createElement('a', {
+                                            href: '#',
+                                            className: currentPage === 'speed-info' ? 'active' : '',
+                                            onClick: (e) => {
+                                                e.preventDefault();
+                                                setCurrentPage('speed-info');
+                                                setMobileMenuOpen(false);
+                                            }
+                                        }, 'Performance Benchmarks')
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+
+                React.createElement('main', null,
+                    getPageContent()
+                ),
+
+                React.createElement('footer', null,
+                    React.createElement('div', { className: 'container' },
+                        React.createElement('div', { className: 'footer-content' },
+                            React.createElement('div', { className: 'footer-section' },
+                                React.createElement('h4', null, 'BlinkRead Professional'),
+                                React.createElement('p', null, 'Advanced RSVP speed reading technology designed for professionals, executives, and knowledge workers seeking enhanced reading performance and cognitive efficiency.')
+                            ),
+                            React.createElement('div', { className: 'footer-section' },
+                                React.createElement('h4', null, 'Legal Documentation'),
+                                React.createElement('a', {
+                                    onClick: () => openModal('privacy')
+                                }, 'Privacy Policy'),
+                                React.createElement('a', {
+                                    onClick: () => openModal('terms')
+                                }, 'Terms of Service'),
+                                React.createElement('a', {
+                                    onClick: () => openModal('disclaimer')
+                                }, 'Professional Disclaimer')
+                            ),
+                            React.createElement('div', { className: 'footer-section' },
+                                React.createElement('h4', null, 'Professional Inquiries'),
+                                React.createElement('p', null, 'For technical support, partnership opportunities, or professional implementation guidance:'),
+                                React.createElement('p', null, 'mohitreal.nz@gmail.com')
+                            )
+                        ),
+                        React.createElement('div', { className: 'footer-bottom' },
+                            React.createElement('p', null, '© 2024 BlinkRead Professional. All rights reserved.')
+                        )
+                    )
+                ),
+
+                React.createElement('div', {
+                    className: `modal ${modalOpen ? 'active' : ''}`,
+                    onClick: (e) => {
+                        if (e.target === e.currentTarget) closeModal();
+                    }
+                },
+                    React.createElement('div', { className: 'modal-content' },
+                        React.createElement('button', {
+                            className: 'modal-close',
+                            onClick: closeModal
+                        }, '×'),
+                        React.createElement('div', { className: 'modal-header' },
+                            React.createElement('h2', null, legal.title)
+                        ),
+                        React.createElement('div', { className: 'modal-body' },
+                            legal.content
+                        )
+                    )
+                )
+            );
+        };
+
+        ReactDOM.render(React.createElement(SpeedReadApp), document.getElementById('root'));
+    </script>
+</body>
+</html>
