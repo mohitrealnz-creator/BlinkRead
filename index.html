@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlinkRead - Professional Speed Reading Technology</title>
     <meta name="description" content="Advanced RSVP speed reading technology for professionals. Improve reading efficiency and comprehension with scientifically-proven methods.">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PFMDB7C6C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-8PFMDB7C6C');
+    </script>
+    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -741,205 +751,217 @@
                 const wordsRemaining = words.length - currentWordIndex;
                 const timeRemaining = Math.ceil(wordsRemaining / speed);
 
-                return React.createElement('div', null,
-                    React.createElement('h2', { style: { marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem' } }, 'Professional Speed Reading Interface'),
-                    React.createElement('textarea', {
-                        value: text,
-                        onChange: (e) => {
-                            setText(e.target.value);
-                            setCurrentWordIndex(0);
-                            setIsPlaying(false);
-                        },
-                        placeholder: "Enter your content here to begin professional speed reading training..."
-                    }),
-
-                    React.createElement('div', { className: 'reading-display' },
-                        React.createElement('div', {
-                            className: 'reading-text',
-                            style: { fontSize: `${fontSize}px` }
-                        },
-                            currentChunk.length > 0 ? (
-                                chunkSize === 1 ? 
-                                React.createElement('span', null,
-                                    React.createElement('span', null, getORPHighlight(currentChunk[0]).before),
-                                    React.createElement('span', { className: 'orp' }, getORPHighlight(currentChunk[0]).orp),
-                                    React.createElement('span', null, getORPHighlight(currentChunk[0]).after)
-                                ) :
-                                React.createElement('span', null, currentChunk.join(' '))
-                            ) : (
-                                React.createElement('span', { style: { opacity: 0.6 } }, 
-                                    words.length === 0 ? 'Enter content above to begin' : 'Ready to start training'
-                                )
-                            )
-                        )
-                    ),
-
-                    React.createElement('div', { className: 'progress-bar' },
-                        React.createElement('div', {
-                            className: 'progress-fill',
-                            style: { width: `${progress}%` }
-                        })
-                    ),
-
-                    React.createElement('div', { className: 'button-group' },
-                        React.createElement('button', {
-                            className: 'btn',
-                            onClick: () => setIsPlaying(!isPlaying),
-                            disabled: words.length === 0
-                        }, isPlaying ? 'Pause Training' : (currentWordIndex >= words.length - 1 ? 'Restart' : 'Begin Training')),
-                        React.createElement('button', {
-                            className: 'btn',
-                            onClick: () => {
-                                setIsPlaying(false);
+                return (
+                    <div>
+                        <h2 style={{ marginBottom: '1.5rem', color: '#1a1a1a', fontSize: '1.5rem' }}>Professional Speed Reading Interface</h2>
+                        <textarea
+                            value={text}
+                            onChange={(e) => {
+                                setText(e.target.value);
                                 setCurrentWordIndex(0);
-                            },
-                            disabled: words.length === 0,
-                            style: { background: '#4a5568' }
-                        }, 'Reset')
-                    ),
+                                setIsPlaying(false);
+                            }}
+                            placeholder="Enter your content here to begin professional speed reading training..."
+                        />
 
-                    React.createElement('div', { className: 'controls' },
-                        React.createElement('div', { className: 'control-group' },
-                            React.createElement('label', null, `Reading Speed: ${speed} WPM`),
-                            React.createElement('input', {
-                                type: 'range',
-                                min: 100,
-                                max: 1000,
-                                step: 25,
-                                value: speed,
-                                onChange: (e) => setSpeed(parseInt(e.target.value)),
-                                className: 'slider-input'
-                            }),
-                            React.createElement('div', { className: 'slider-values' },
-                                React.createElement('span', null, '100 WPM'),
-                                React.createElement('span', null, '1000 WPM')
-                            )
-                        ),
-                        React.createElement('div', { className: 'control-group' },
-                            React.createElement('label', null, `Word Grouping: ${chunkSize} word${chunkSize > 1 ? 's' : ''}`),
-                            React.createElement('input', {
-                                type: 'range',
-                                min: 1,
-                                max: 5,
-                                step: 1,
-                                value: chunkSize,
-                                onChange: (e) => setChunkSize(parseInt(e.target.value)),
-                                className: 'slider-input'
-                            }),
-                            React.createElement('div', { className: 'slider-values' },
-                                React.createElement('span', null, '1 word'),
-                                React.createElement('span', null, '5 words')
-                            )
-                        )
-                    ),
+                        <div className="reading-display">
+                            <div className="reading-text" style={{ fontSize: `${fontSize}px` }}>
+                                {currentChunk.length > 0 ? (
+                                    chunkSize === 1 ? 
+                                    <span>
+                                        <span>{getORPHighlight(currentChunk[0]).before}</span>
+                                        <span className="orp">{getORPHighlight(currentChunk[0]).orp}</span>
+                                        <span>{getORPHighlight(currentChunk[0]).after}</span>
+                                    </span> :
+                                    <span>{currentChunk.join(' ')}</span>
+                                ) : (
+                                    <span style={{ opacity: 0.6 }}>{words.length === 0 ? 'Enter content above to begin' : 'Ready to start training'}</span>
+                                )}
+                            </div>
+                        </div>
 
-                    React.createElement('div', { className: 'stats' },
-                        React.createElement('div', { className: 'stat' },
-                            React.createElement('div', { className: 'stat-value' }, `${Math.floor(currentWordIndex / chunkSize) + 1}`),
-                            React.createElement('div', { className: 'stat-label' }, `of ${Math.ceil(words.length / chunkSize)} segments`)
-                        ),
-                        React.createElement('div', { className: 'stat' },
-                            React.createElement('div', { className: 'stat-value' }, `${timeRemaining}m`),
-                            React.createElement('div', { className: 'stat-label' }, 'time remaining')
-                        ),
-                        React.createElement('div', { className: 'stat' },
-                            React.createElement('div', { className: 'stat-value' }, `${words.length}`),
-                            React.createElement('div', { className: 'stat-label' }, 'total words')
-                        )
-                    ),
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                        </div>
 
-                    chunkSize === 1 && React.createElement('div', {
-                        className: 'feature-highlight'
-                    },
-                        React.createElement('h3', { style: { color: '#dc2626', marginBottom: '1rem', fontSize: '1.1rem' } }, 'Optimal Recognition Point Technology'),
-                        React.createElement('p', { style: { color: '#4a5568', margin: 0 } }, 'The highlighted red letter represents the scientifically-determined Optimal Recognition Point (ORP). This advanced focal technique minimizes eye movement and maximizes neural processing efficiency for enhanced reading performance.')
-                    )
+                        <div className="button-group">
+                            <button
+                                className="btn"
+                                onClick={() => setIsPlaying(!isPlaying)}
+                                disabled={words.length === 0}
+                            >
+                                {isPlaying ? 'Pause Training' : (currentWordIndex >= words.length - 1 ? 'Restart' : 'Begin Training')}
+                            </button>
+                            <button
+                                className="btn"
+                                onClick={() => {
+                                    setIsPlaying(false);
+                                    setCurrentWordIndex(0);
+                                }}
+                                disabled={words.length === 0}
+                                style={{ background: '#4a5568' }}
+                            >
+                                Reset
+                            </button>
+                        </div>
+
+                        <div className="controls">
+                            <div className="control-group">
+                                <label>Reading Speed: {speed} WPM</label>
+                                <input
+                                    type="range"
+                                    min="100"
+                                    max="1000"
+                                    step="25"
+                                    value={speed}
+                                    onChange={(e) => setSpeed(parseInt(e.target.value))}
+                                    className="slider-input"
+                                />
+                                <div className="slider-values">
+                                    <span>100 WPM</span>
+                                    <span>1000 WPM</span>
+                                </div>
+                            </div>
+                            <div className="control-group">
+                                <label>Word Grouping: {chunkSize} word{chunkSize > 1 ? 's' : ''}</label>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="5"
+                                    step="1"
+                                    value={chunkSize}
+                                    onChange={(e) => setChunkSize(parseInt(e.target.value))}
+                                    className="slider-input"
+                                />
+                                <div className="slider-values">
+                                    <span>1 word</span>
+                                    <span>5 words</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="stats">
+                            <div className="stat">
+                                <div className="stat-value">{Math.floor(currentWordIndex / chunkSize) + 1}</div>
+                                <div className="stat-label">of {Math.ceil(words.length / chunkSize)} segments</div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-value">{timeRemaining}m</div>
+                                <div className="stat-label">time remaining</div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-value">{words.length}</div>
+                                <div className="stat-label">total words</div>
+                            </div>
+                        </div>
+
+                        {chunkSize === 1 && (
+                            <div className="feature-highlight">
+                                <h3 style={{ color: '#dc2626', marginBottom: '1rem', fontSize: '1.1rem' }}>Optimal Recognition Point Technology</h3>
+                                <p style={{ color: '#4a5568', margin: 0 }}>The highlighted red letter represents the scientifically-determined Optimal Recognition Point (ORP). This advanced focal technique minimizes eye movement and maximizes neural processing efficiency for enhanced reading performance.</p>
+                            </div>
+                        )}
+                    </div>
                 );
             };
 
             const HomePage = () => {
-                return React.createElement('div', { className: 'homepage-layout container' },
-                    React.createElement('div', { className: 'left-sidebar sidebar' },
-                        React.createElement('h3', null, 'Training Benefits'),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'Enhanced Productivity'),
-                            React.createElement('p', null, 'Process 30-60 additional minutes of content daily, translating to 200+ hours annually.'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('benefits');
-                                }
-                            }, 'Explore Benefits →')
-                        ),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'Cognitive Enhancement'),
-                            React.createElement('p', null, 'Strengthen neural pathways and improve information processing capabilities.'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('benefits');
-                                }
-                            }, 'Learn More →')
-                        ),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'Performance Metrics'),
-                            React.createElement('p', null, 'Track your reading velocity improvements and comprehension rates.'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('speed-info');
-                                }
-                            }, 'View Benchmarks →')
-                        )
-                    ),
-                    React.createElement('div', { className: 'main-reader' },
-                        React.createElement(SpeedReader)
-                    ),
-                    React.createElement('div', { className: 'right-sidebar sidebar' },
-                        React.createElement('h3', null, 'Speed Reading Science'),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'RSVP Technology'),
-                            React.createElement('p', null, 'Rapid Serial Visual Presentation eliminates eye movement and enhances focus.'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('speed-info');
-                                }
-                            }, 'Learn Technology →')
-                        ),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'Performance Ranges'),
-                            React.createElement('p', null, 'Baseline: 200-300 WPM • Advanced: 700-1000+ WPM'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('speed-info');
-                                }
-                            }, 'View Ranges →')
-                        ),
-                        React.createElement('div', { className: 'sidebar-item' },
-                            React.createElement('h4', null, 'Professional Applications'),
-                            React.createElement('p', null, 'Ideal for executives, researchers, students, and knowledge professionals.'),
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'sidebar-link',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('benefits');
-                                }
-                            }, 'See Applications →')
-                        )
-                    )
+                return (
+                    <div className="homepage-layout container">
+                        <div className="left-sidebar sidebar">
+                            <h3>Training Benefits</h3>
+                            <div className="sidebar-item">
+                                <h4>Enhanced Productivity</h4>
+                                <p>Process 30-60 additional minutes of content daily, translating to 200+ hours annually.</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('benefits');
+                                    }}
+                                >
+                                    Explore Benefits →
+                                </a>
+                            </div>
+                            <div className="sidebar-item">
+                                <h4>Cognitive Enhancement</h4>
+                                <p>Strengthen neural pathways and improve information processing capabilities.</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('benefits');
+                                    }}
+                                >
+                                    Learn More →
+                                </a>
+                            </div>
+                            <div className="sidebar-item">
+                                <h4>Performance Metrics</h4>
+                                <p>Track your reading velocity improvements and comprehension rates.</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('speed-info');
+                                    }}
+                                >
+                                    View Benchmarks →
+                                </a>
+                            </div>
+                        </div>
+                        <div className="main-reader">
+                            <SpeedReader />
+                        </div>
+                        <div className="right-sidebar sidebar">
+                            <h3>Speed Reading Science</h3>
+                            <div className="sidebar-item">
+                                <h4>RSVP Technology</h4>
+                                <p>Rapid Serial Visual Presentation eliminates eye movement and enhances focus.</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('speed-info');
+                                    }}
+                                >
+                                    Learn Technology →
+                                </a>
+                            </div>
+                            <div className="sidebar-item">
+                                <h4>Performance Ranges</h4>
+                                <p>Baseline: 200-300 WPM • Advanced: 700-1000+ WPM</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('speed-info');
+                                    }}
+                                >
+                                    View Ranges →
+                                </a>
+                            </div>
+                            <div className="sidebar-item">
+                                <h4>Professional Applications</h4>
+                                <p>Ideal for executives, researchers, students, and knowledge professionals.</p>
+                                <a
+                                    href="#"
+                                    className="sidebar-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('benefits');
+                                    }}
+                                >
+                                    See Applications →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 );
             };
 
@@ -971,24 +993,26 @@
                     }
                 ];
 
-                return React.createElement('div', { className: 'container' },
-                    React.createElement('div', { className: 'card' },
-                        React.createElement('h1', null, 'Professional Development Benefits'),
-                        React.createElement('p', null, 'Speed reading technology offers measurable advantages for professional development and cognitive enhancement. The following benefits represent evidence-based outcomes observed in users who engage with systematic speed reading training programs.')
-                    ),
-                    React.createElement('div', { className: 'benefits-grid' },
-                        benefits.map((benefit, index) =>
-                            React.createElement('div', { key: index, className: 'benefit' },
-                                React.createElement('h3', null, benefit.title),
-                                React.createElement('p', null, benefit.description)
-                            )
-                        )
-                    ),
-                    React.createElement('div', { className: 'card' },
-                        React.createElement('h2', null, 'Implementation Methodology'),
-                        React.createElement('p', null, 'BlinkRead employs scientifically-validated Rapid Serial Visual Presentation (RSVP) methodology to enhance reading performance. This approach presents text sequentially at optimal intervals, reducing eye movement and enabling concentrated focus on word recognition and comprehension processes.'),
-                        React.createElement('p', null, 'Professional users consistently report significant improvements in information processing speed, document review efficiency, and overall cognitive performance within 2-4 weeks of regular training implementation.')
-                    )
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <h1>Professional Development Benefits</h1>
+                            <p>Speed reading technology offers measurable advantages for professional development and cognitive enhancement. The following benefits represent evidence-based outcomes observed in users who engage with systematic speed reading training programs.</p>
+                        </div>
+                        <div className="benefits-grid">
+                            {benefits.map((benefit, index) => (
+                                <div key={index} className="benefit">
+                                    <h3>{benefit.title}</h3>
+                                    <p>{benefit.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="card">
+                            <h2>Implementation Methodology</h2>
+                            <p>BlinkRead employs scientifically-validated Rapid Serial Visual Presentation (RSVP) methodology to enhance reading performance. This approach presents text sequentially at optimal intervals, reducing eye movement and enabling concentrated focus on word recognition and comprehension processes.</p>
+                            <p>Professional users consistently report significant improvements in information processing speed, document review efficiency, and overall cognitive performance within 2-4 weeks of regular training implementation.</p>
+                        </div>
+                    </div>
                 );
             };
 
@@ -1011,48 +1035,52 @@
                     }
                 ];
 
-                return React.createElement('div', { className: 'container' },
-                    React.createElement('div', { className: 'card' },
-                        React.createElement('h1', null, 'Reading Performance Benchmarks'),
-                        React.createElement('p', null, 'Understanding reading speed benchmarks enables users to establish realistic training objectives and monitor professional development progress. Performance levels vary based on individual aptitude, training consistency, and content complexity.')
-                    ),
-                    React.createElement('div', { className: 'speed-ranges' },
-                        speedRanges.map((range, index) =>
-                            React.createElement('div', { key: index, className: 'speed-range' },
-                                React.createElement('h3', null, range.title),
-                                React.createElement('div', { className: 'speed-value' }, range.speed),
-                                React.createElement('p', null, range.description)
-                            )
-                        )
-                    ),
-                    React.createElement('div', { className: 'card' },
-                        React.createElement('h2', null, 'Professional Training Methodology'),
-                        React.createElement('p', null, 'Optimal results require consistent practice and progressive difficulty advancement. Begin with comfortable velocity settings and implement gradual increases over time. Focus on eliminating subvocalization patterns to unlock advanced reading speeds while maintaining comprehension quality.'),
-                        React.createElement('p', null, 'Professional users should maintain daily practice sessions of 15-20 minutes, prioritizing technique refinement over raw speed development during initial training phases.')
-                    ),
-                    React.createElement('div', { className: 'card' },
-                        React.createElement('h2', null, 'RSVP Technology Framework'),
-                        React.createElement('p', null, 'Rapid Serial Visual Presentation technology eliminates traditional reading limitations by presenting text at a fixed focal point. This methodology reduces saccadic eye movements, minimizes regression patterns, and enables sustained concentration on word recognition processes.'),
-                        React.createElement('p', null, 'The Optimal Recognition Point (ORP) highlighting system identifies the most efficient focal position within each word, maximizing neural processing efficiency and reading velocity while preserving comprehension accuracy.')
-                    )
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <h1>Reading Performance Benchmarks</h1>
+                            <p>Understanding reading speed benchmarks enables users to establish realistic training objectives and monitor professional development progress. Performance levels vary based on individual aptitude, training consistency, and content complexity.</p>
+                        </div>
+                        <div className="speed-ranges">
+                            {speedRanges.map((range, index) => (
+                                <div key={index} className="speed-range">
+                                    <h3>{range.title}</h3>
+                                    <div className="speed-value">{range.speed}</div>
+                                    <p>{range.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="card">
+                            <h2>Professional Training Methodology</h2>
+                            <p>Optimal results require consistent practice and progressive difficulty advancement. Begin with comfortable velocity settings and implement gradual increases over time. Focus on eliminating subvocalization patterns to unlock advanced reading speeds while maintaining comprehension quality.</p>
+                            <p>Professional users should maintain daily practice sessions of 15-20 minutes, prioritizing technique refinement over raw speed development during initial training phases.</p>
+                        </div>
+                        <div className="card">
+                            <h2>RSVP Technology Framework</h2>
+                            <p>Rapid Serial Visual Presentation technology eliminates traditional reading limitations by presenting text at a fixed focal point. This methodology reduces saccadic eye movements, minimizes regression patterns, and enables sustained concentration on word recognition processes.</p>
+                            <p>The Optimal Recognition Point (ORP) highlighting system identifies the most efficient focal position within each word, maximizing neural processing efficiency and reading velocity while preserving comprehension accuracy.</p>
+                        </div>
+                    </div>
                 );
             };
 
             const ReaderPage = () => {
-                return React.createElement('div', { className: 'container' },
-                    React.createElement('div', { className: 'card' },
-                        React.createElement(SpeedReader)
-                    )
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <SpeedReader />
+                        </div>
+                    </div>
                 );
             };
 
             const getPageContent = () => {
                 switch(currentPage) {
-                    case 'home': return React.createElement(HomePage);
-                    case 'reader': return React.createElement(ReaderPage);
-                    case 'benefits': return React.createElement(BenefitsPage);
-                    case 'speed-info': return React.createElement(SpeedInfoPage);
-                    default: return React.createElement(HomePage);
+                    case 'home': return <HomePage />;
+                    case 'reader': return <ReaderPage />;
+                    case 'benefits': return <BenefitsPage />;
+                    case 'speed-info': return <SpeedInfoPage />;
+                    default: return <HomePage />;
                 }
             };
 
@@ -1061,52 +1089,58 @@
                     case 'privacy':
                         return {
                             title: 'Privacy Policy',
-                            content: React.createElement('div', { className: 'legal-page' },
-                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
-                                React.createElement('h3', null, '1. Data Collection and Storage'),
-                                React.createElement('p', null, 'BlinkRead operates as a client-side application with no user account requirements or server-side data storage. We do not collect, store, transmit, or track any personal information, reading content, or usage patterns. All user interactions remain entirely within your local device environment.'),
-                                React.createElement('h3', null, '2. Local Browser Storage'),
-                                React.createElement('p', null, 'Any preference settings or configurations you adjust are stored exclusively in your browser\'s local storage and are never transmitted to external servers. Users may clear this data at any time through standard browser settings management.'),
-                                React.createElement('h3', null, '3. Analytics and Tracking'),
-                                React.createElement('p', null, 'BlinkRead does not implement cookies, analytics tracking, user behavior monitoring, or any third-party tracking technologies. Your usage of this platform is completely private and anonymous.'),
-                                React.createElement('h3', null, '4. Content Processing'),
-                                React.createElement('p', null, 'All text content input into the speed reading interface is processed locally within your browser environment and is never transmitted to external servers, stored remotely, or accessed by third parties.'),
-                                React.createElement('h3', null, '5. Contact Information'),
-                                React.createElement('p', null, 'For inquiries regarding this privacy policy or platform functionality, please contact: mohitreal.nz@gmail.com')
+                            content: (
+                                <div className="legal-page">
+                                    <p>Last updated: {new Date().toLocaleDateString()}</p>
+                                    <h3>1. Data Collection and Storage</h3>
+                                    <p>BlinkRead operates as a client-side application with no user account requirements or server-side data storage. We do not collect, store, transmit, or track any personal information, reading content, or usage patterns. All user interactions remain entirely within your local device environment.</p>
+                                    <h3>2. Local Browser Storage</h3>
+                                    <p>Any preference settings or configurations you adjust are stored exclusively in your browser's local storage and are never transmitted to external servers. Users may clear this data at any time through standard browser settings management.</p>
+                                    <h3>3. Analytics and Tracking</h3>
+                                    <p>BlinkRead does not implement cookies, analytics tracking, user behavior monitoring, or any third-party tracking technologies. Your usage of this platform is completely private and anonymous.</p>
+                                    <h3>4. Content Processing</h3>
+                                    <p>All text content input into the speed reading interface is processed locally within your browser environment and is never transmitted to external servers, stored remotely, or accessed by third parties.</p>
+                                    <h3>5. Contact Information</h3>
+                                    <p>For inquiries regarding this privacy policy or platform functionality, please contact: mohitreal.nz@gmail.com</p>
+                                </div>
                             )
                         };
                     case 'terms':
                         return {
                             title: 'Terms of Service',
-                            content: React.createElement('div', { className: 'legal-page' },
-                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
-                                React.createElement('h3', null, '1. Service Provision'),
-                                React.createElement('p', null, 'BlinkRead provides professional speed reading training tools and educational resources without charge. Users may access this service for personal development, educational advancement, or professional enhancement purposes without registration requirements.'),
-                                React.createElement('h3', null, '2. Service Availability and Reliability'),
-                                React.createElement('p', null, 'While we endeavor to maintain consistent service availability, BlinkRead is provided on an "as-is" basis without warranties regarding uptime, functionality, or performance. We assume no liability for service interruptions or technical difficulties.'),
-                                React.createElement('h3', null, '3. Intellectual Property Rights'),
-                                React.createElement('p', null, 'Users retain complete ownership and control over any content they input into the platform. BlinkRead claims no rights to user-generated content and does not store, access, or utilize such materials in any manner.'),
-                                React.createElement('h3', null, '4. Acceptable Use Guidelines'),
-                                React.createElement('p', null, 'Users agree to utilize this service exclusively for lawful purposes and in ways that do not compromise platform integrity or negatively impact other users. Attempts to reverse engineer, exploit, or damage the service are prohibited.'),
-                                React.createElement('h3', null, '5. Service Modifications'),
-                                React.createElement('p', null, 'BlinkRead reserves the right to modify, update, or discontinue service features without advance notice. Users acknowledge that continued access depends on our discretion and available resources.')
+                            content: (
+                                <div className="legal-page">
+                                    <p>Last updated: {new Date().toLocaleDateString()}</p>
+                                    <h3>1. Service Provision</h3>
+                                    <p>BlinkRead provides professional speed reading training tools and educational resources without charge. Users may access this service for personal development, educational advancement, or professional enhancement purposes without registration requirements.</p>
+                                    <h3>2. Service Availability and Reliability</h3>
+                                    <p>While we endeavor to maintain consistent service availability, BlinkRead is provided on an "as-is" basis without warranties regarding uptime, functionality, or performance. We assume no liability for service interruptions or technical difficulties.</p>
+                                    <h3>3. Intellectual Property Rights</h3>
+                                    <p>Users retain complete ownership and control over any content they input into the platform. BlinkRead claims no rights to user-generated content and does not store, access, or utilize such materials in any manner.</p>
+                                    <h3>4. Acceptable Use Guidelines</h3>
+                                    <p>Users agree to utilize this service exclusively for lawful purposes and in ways that do not compromise platform integrity or negatively impact other users. Attempts to reverse engineer, exploit, or damage the service are prohibited.</p>
+                                    <h3>5. Service Modifications</h3>
+                                    <p>BlinkRead reserves the right to modify, update, or discontinue service features without advance notice. Users acknowledge that continued access depends on our discretion and available resources.</p>
+                                </div>
                             )
                         };
                     case 'disclaimer':
                         return {
                             title: 'Professional Disclaimer',
-                            content: React.createElement('div', { className: 'legal-page' },
-                                React.createElement('p', null, 'Last updated: ' + new Date().toLocaleDateString()),
-                                React.createElement('h3', null, '1. Performance Expectations'),
-                                React.createElement('p', null, 'BlinkRead provides educational tools designed to support reading speed development. We make no guarantees regarding specific performance improvements, achievement timelines, or individual results, as outcomes vary significantly based on user dedication, aptitude, and practice consistency.'),
-                                React.createElement('h3', null, '2. Individual Variation in Results'),
-                                React.createElement('p', null, 'Reading speed enhancement depends on numerous factors including baseline abilities, training frequency, content complexity, and individual cognitive characteristics. Performance improvements referenced represent typical outcomes but are not guaranteed for all users.'),
-                                React.createElement('h3', null, '3. Educational Purpose Limitation'),
-                                React.createElement('p', null, 'This platform serves educational and productivity enhancement purposes exclusively. BlinkRead is not intended to diagnose, treat, or address reading disabilities, learning disorders, or cognitive impairments. Users with such concerns should consult qualified educational or medical professionals.'),
-                                React.createElement('h3', null, '4. Liability Limitations'),
-                                React.createElement('p', null, 'BlinkRead assumes no responsibility for direct, indirect, incidental, or consequential outcomes arising from platform usage. Users engage with this service at their own discretion and assume full responsibility for their training decisions.'),
-                                React.createElement('h3', null, '5. Professional Development Context'),
-                                React.createElement('p', null, 'This tool is designed to complement, not replace, formal educational instruction or professional development programs. Users should integrate speed reading techniques within appropriate learning contexts for optimal results.')
+                            content: (
+                                <div className="legal-page">
+                                    <p>Last updated: {new Date().toLocaleDateString()}</p>
+                                    <h3>1. Performance Expectations</h3>
+                                    <p>BlinkRead provides educational tools designed to support reading speed development. We make no guarantees regarding specific performance improvements, achievement timelines, or individual results, as outcomes vary significantly based on user dedication, aptitude, and practice consistency.</p>
+                                    <h3>2. Individual Variation in Results</h3>
+                                    <p>Reading speed enhancement depends on numerous factors including baseline abilities, training frequency, content complexity, and individual cognitive characteristics. Performance improvements referenced represent typical outcomes but are not guaranteed for all users.</p>
+                                    <h3>3. Educational Purpose Limitation</h3>
+                                    <p>This platform serves educational and productivity enhancement purposes exclusively. BlinkRead is not intended to diagnose, treat, or address reading disabilities, learning disorders, or cognitive impairments. Users with such concerns should consult qualified educational or medical professionals.</p>
+                                    <h3>4. Liability Limitations</h3>
+                                    <p>BlinkRead assumes no responsibility for direct, indirect, incidental, or consequential outcomes arising from platform usage. Users engage with this service at their own discretion and assume full responsibility for their training decisions.</p>
+                                    <h3>5. Professional Development Context</h3>
+                                    <p>This tool is designed to complement, not replace, formal educational instruction or professional development programs. Users should integrate speed reading techniques within appropriate learning contexts for optimal results.</p>
+                                </div>
                             )
                         };
                     default:
@@ -1116,135 +1150,138 @@
 
             const legal = getLegalContent();
 
-            return React.createElement('div', null,
-                React.createElement('header', null,
-                    React.createElement('div', { className: 'container' },
-                        React.createElement('div', { className: 'header-content' },
-                            React.createElement('a', {
-                                href: '#',
-                                className: 'logo',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    setCurrentPage('home');
-                                    setMobileMenuOpen(false);
-                                }
-                            }, 'BlinkRead'),
-                            React.createElement('button', {
-                                className: 'mobile-menu-toggle',
-                                onClick: () => setMobileMenuOpen(!mobileMenuOpen)
-                            }, '☰'),
-                            React.createElement('nav', null,
-                                React.createElement('ul', {
-                                    className: mobileMenuOpen ? 'active' : ''
-                                },
-                                    React.createElement('li', null,
-                                        React.createElement('a', {
-                                            href: '#',
-                                            className: currentPage === 'home' ? 'active' : '',
-                                            onClick: (e) => {
-                                                e.preventDefault();
-                                                setCurrentPage('home');
-                                                setMobileMenuOpen(false);
-                                            }
-                                        }, 'Home')
-                                    ),
-                                    React.createElement('li', null,
-                                        React.createElement('a', {
-                                            href: '#',
-                                            className: currentPage === 'reader' ? 'active' : '',
-                                            onClick: (e) => {
-                                                e.preventDefault();
-                                                setCurrentPage('reader');
-                                                setMobileMenuOpen(false);
-                                            }
-                                        }, 'Training Platform')
-                                    ),
-                                    React.createElement('li', null,
-                                        React.createElement('a', {
-                                            href: '#',
-                                            className: currentPage === 'benefits' ? 'active' : '',
-                                            onClick: (e) => {
-                                                e.preventDefault();
-                                                setCurrentPage('benefits');
-                                                setMobileMenuOpen(false);
-                                            }
-                                        }, 'Benefits')
-                                    ),
-                                    React.createElement('li', null,
-                                        React.createElement('a', {
-                                            href: '#',
-                                            className: currentPage === 'speed-info' ? 'active' : '',
-                                            onClick: (e) => {
-                                                e.preventDefault();
-                                                setCurrentPage('speed-info');
-                                                setMobileMenuOpen(false);
-                                            }
-                                        }, 'Performance Benchmarks')
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ),
+            return (
+                <div>
+                    <header>
+                        <div className="container">
+                            <div className="header-content">
+                                <a
+                                    href="#"
+                                    className="logo"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage('home');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                >
+                                    BlinkRead
+                                </a>
+                                <button
+                                    className="mobile-menu-toggle"
+                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                >
+                                    ☰
+                                </button>
+                                <nav>
+                                    <ul className={mobileMenuOpen ? 'active' : ''}>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                className={currentPage === 'home' ? 'active' : ''}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCurrentPage('home');
+                                                    setMobileMenuOpen(false);
+                                                }}
+                                            >
+                                                Home
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                className={currentPage === 'reader' ? 'active' : ''}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCurrentPage('reader');
+                                                    setMobileMenuOpen(false);
+                                                }}
+                                            >
+                                                Training Platform
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                className={currentPage === 'benefits' ? 'active' : ''}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCurrentPage('benefits');
+                                                    setMobileMenuOpen(false);
+                                                }}
+                                            >
+                                                Benefits
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                className={currentPage === 'speed-info' ? 'active' : ''}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCurrentPage('speed-info');
+                                                    setMobileMenuOpen(false);
+                                                }}
+                                            >
+                                                Performance Benchmarks
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </header>
 
-                React.createElement('main', null,
-                    getPageContent()
-                ),
+                    <main>
+                        {getPageContent()}
+                    </main>
 
-                React.createElement('footer', null,
-                    React.createElement('div', { className: 'container' },
-                        React.createElement('div', { className: 'footer-content' },
-                            React.createElement('div', { className: 'footer-section' },
-                                React.createElement('h4', null, 'BlinkRead Professional'),
-                                React.createElement('p', null, 'Advanced RSVP speed reading technology designed for professionals, executives, and knowledge workers seeking enhanced reading performance and cognitive efficiency.')
-                            ),
-                            React.createElement('div', { className: 'footer-section' },
-                                React.createElement('h4', null, 'Legal Documentation'),
-                                React.createElement('a', {
-                                    onClick: () => openModal('privacy')
-                                }, 'Privacy Policy'),
-                                React.createElement('a', {
-                                    onClick: () => openModal('terms')
-                                }, 'Terms of Service'),
-                                React.createElement('a', {
-                                    onClick: () => openModal('disclaimer')
-                                }, 'Professional Disclaimer')
-                            ),
-                            React.createElement('div', { className: 'footer-section' },
-                                React.createElement('h4', null, 'Professional Inquiries'),
-                                React.createElement('p', null, 'For technical support, partnership opportunities, or professional implementation guidance:'),
-                                React.createElement('p', null, 'mohitreal.nz@gmail.com')
-                            )
-                        ),
-                        React.createElement('div', { className: 'footer-bottom' },
-                            React.createElement('p', null, '© 2024 BlinkRead Professional. All rights reserved.')
-                        )
-                    )
-                ),
+                    <footer>
+                        <div className="container">
+                            <div className="footer-content">
+                                <div className="footer-section">
+                                    <h4>BlinkRead Professional</h4>
+                                    <p>Advanced RSVP speed reading technology designed for professionals, executives, and knowledge workers seeking enhanced reading performance and cognitive efficiency.</p>
+                                </div>
+                                <div className="footer-section">
+                                    <h4>Legal Documentation</h4>
+                                    <a onClick={() => openModal('privacy')}>Privacy Policy</a>
+                                    <a onClick={() => openModal('terms')}>Terms of Service</a>
+                                    <a onClick={() => openModal('disclaimer')}>Professional Disclaimer</a>
+                                </div>
+                                <div className="footer-section">
+                                    <h4>Professional Inquiries</h4>
+                                    <p>For technical support, partnership opportunities, or professional implementation guidance:</p>
+                                    <p>mohitreal.nz@gmail.com</p>
+                                </div>
+                            </div>
+                            <div className="footer-bottom">
+                                <p>© 2025 BlinkRead Professional. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </footer>
 
-                React.createElement('div', {
-                    className: `modal ${modalOpen ? 'active' : ''}`,
-                    onClick: (e) => {
-                        if (e.target === e.currentTarget) closeModal();
-                    }
-                },
-                    React.createElement('div', { className: 'modal-content' },
-                        React.createElement('button', {
-                            className: 'modal-close',
-                            onClick: closeModal
-                        }, '×'),
-                        React.createElement('div', { className: 'modal-header' },
-                            React.createElement('h2', null, legal.title)
-                        ),
-                        React.createElement('div', { className: 'modal-body' },
-                            legal.content
-                        )
-                    )
-                )
+                    <div
+                        className={`modal ${modalOpen ? 'active' : ''}`}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) closeModal();
+                        }}
+                    >
+                        <div className="modal-content">
+                            <button className="modal-close" onClick={closeModal}>×</button>
+                            <div className="modal-header">
+                                <h2>{legal.title}</h2>
+                            </div>
+                            <div className="modal-body">
+                                {legal.content}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             );
         };
 
-        ReactDOM.render(React.createElement(SpeedReadApp), document.getElementById('root'));
+        ReactDOM.render(<SpeedReadApp />, document.getElementById('root'));
     </script>
 </body>
 </html>
